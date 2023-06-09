@@ -73,3 +73,63 @@ def main():  #main fonksiyonunu tanımlar.
         print()
         print(sonuc14)
         print()
+
+        #Verileri içeren data isimli sözlük oluşturulur. Burada get ile fonksiyon çağırma işlemi uygulandı.
+        #Sözlüğün anahtarları ve değerleri girildi.
+        data = {
+            "Nesne": ["Çalışan", "Çalışan", "Çalışan", "Mavi Yaka", "Mavi Yaka", "Mavi Yaka", "Beyaz Yaka", "Beyaz Yaka", "Beyaz Yaka"],
+            "TC No": [calisan1.get_tc_no(), calisan2.get_tc_no(), calisan3.get_tc_no(), mavi_yaka1.get_tc_no(), mavi_yaka2.get_tc_no(), mavi_yaka3.get_tc_no(), beyaz_yaka1.get_tc_no(), beyaz_yaka2.get_tc_no(), beyaz_yaka3.get_tc_no()],
+            "Ad": [calisan1.get_ad(), calisan2.get_ad(), calisan3.get_ad(), mavi_yaka1.get_ad(), mavi_yaka2.get_ad(), mavi_yaka3.get_ad(), beyaz_yaka1.get_ad(), beyaz_yaka2.get_ad(), beyaz_yaka3.get_ad()],
+            "Soyad": [calisan1.get_soyad(), calisan2.get_soyad(), calisan3.get_soyad(), mavi_yaka1.get_soyad(), mavi_yaka2.get_soyad(), mavi_yaka3.get_soyad(), beyaz_yaka1.get_soyad(), beyaz_yaka2.get_soyad(), beyaz_yaka3.get_soyad()],
+            "Yaş": [calisan1.get_yas(), calisan2.get_yas(), calisan3.get_yas(), mavi_yaka1.get_yas(), mavi_yaka2.get_yas(), mavi_yaka3.get_yas(), beyaz_yaka1.get_yas(), beyaz_yaka2.get_yas(), beyaz_yaka3.get_yas()],
+            "Cinsiyet": [calisan1.get_cinsiyet(), calisan2.get_cinsiyet(), calisan3.get_cinsiyet(), mavi_yaka1.get_cinsiyet(), mavi_yaka2.get_cinsiyet(), mavi_yaka3.get_cinsiyet(), beyaz_yaka1.get_cinsiyet(), beyaz_yaka2.get_cinsiyet(), beyaz_yaka3.get_cinsiyet()],
+            "Uyruk": [calisan1.get_uyruk(), calisan2.get_uyruk(), calisan3.get_uyruk(), mavi_yaka1.get_uyruk(), mavi_yaka2.get_uyruk(), mavi_yaka3.get_uyruk(), beyaz_yaka1.get_uyruk(), beyaz_yaka2.get_uyruk(), beyaz_yaka3.get_uyruk()],
+            "Sektör": [calisan1.get_sektor(), calisan2.get_sektor(), calisan3.get_sektor(), mavi_yaka1.get_sektor(), mavi_yaka2.get_sektor(), mavi_yaka3.get_sektor(), beyaz_yaka1.get_sektor(), beyaz_yaka2.get_sektor(), beyaz_yaka3.get_sektor()],
+            "Tecrübe": [calisan1.get_tecrube(), calisan2.get_tecrube(), calisan3.get_tecrube(), mavi_yaka1.get_tecrube(), mavi_yaka2.get_tecrube(), mavi_yaka3.get_tecrube(), beyaz_yaka1.get_tecrube(), beyaz_yaka2.get_tecrube(), beyaz_yaka3.get_tecrube()],
+            "Maaş": [calisan1.get_maas(), calisan2.get_maas(), calisan3.get_maas(), mavi_yaka1.get_maas(), mavi_yaka2.get_maas(), mavi_yaka3.get_maas(), beyaz_yaka1.get_maas(), beyaz_yaka2.get_maas(), beyaz_yaka3.get_maas()],
+            "Yıpranma Payı": [0, 0, 0, mavi_yaka1.get_yipranma_payi(), mavi_yaka2.get_yipranma_payi(), mavi_yaka3.get_yipranma_payi(), 0, 0, 0],
+            "Teşvik Primi": [0, 0, 0, 0, 0, 0, beyaz_yaka1.get_tesvik_primi(), beyaz_yaka2.get_tesvik_primi(), beyaz_yaka3.get_tesvik_primi()],
+            "Yeni Maaş": [calisan1.get_yeni_maas(), calisan2.get_yeni_maas(), calisan3.get_yeni_maas(), mavi_yaka1.get_yeni_maas(), mavi_yaka2.get_yeni_maas(), mavi_yaka3.get_yeni_maas(), beyaz_yaka1.get_yeni_maas(), beyaz_yaka2.get_yeni_maas(), beyaz_yaka3.get_yeni_maas()]
+        }
+
+        #Sözlük kullanarak DataFrame oluşturma. Bu kod sayesinde veriler tablo şeklinde görünür.
+        df = pd.DataFrame(data)  # DataFrame df adıyla bir değişkene atar.
+        print(df)
+
+        #Bazı değişken değerlerini boş oluşturabilmek amacıyla DataFrame için bu değerler 0 atanır.
+        df = df.fillna(0)
+
+        #Tecrube sütununundaki verileri yıla çevirmek için.
+        df['Tecrübe'] = df['Tecrübe'] // 12  # Öznitelik olarak kullanım
+
+        #Çalışan, mavi yaka ve beyaz yaka için tecrübe ve yeni maaş ortalamalarını her grup için hesaplamak ve yazdırmak için.
+        grouped = df.groupby("Nesne").agg({"Tecrübe": "mean", "Yeni Maaş": "mean"})  # Nesne sütünuna göre gruplama yapar.
+        print(grouped)
+
+        #Maaşı 15000TL üzerinde olanların toplam sayısını bulmak için.
+        maas_fazla_15000 = df[df["Maaş"] > 15000]  # Burada maaşı 15000'in üzerindekilerin sayısını bulur.
+        toplam_sayi = len(maas_fazla_15000)  # toplam_sayi değişkenine atar.
+        print("Maaşı 15000TL üzerinde olanların toplam sayısı:", toplam_sayi)
+
+        #Yeni maaşa göre DataFrame'i küçükten büyüğe sıralar, df_sirali adlı bir DataFrame'e atar ve yazdırır.
+        df_sirali = df.sort_values("Yeni Maaş")
+        print(df_sirali)
+
+        #Tecrübesi 3 seneden fazla olan Beyaz yakalıları bulmak ve yazdırmak için.
+        beyazyaka_tecrube_ust_3 = df[(df["Nesne"] == "Beyaz Yaka") & (df["Tecrübe"] > 3)]
+        print(beyazyaka_tecrube_ust_3)
+
+        #Yeni maaşı 10000 TL üzerinde olanlar için; 2-5 satır arası olanları, tc_no ve yeni_maaş sütunlarını seçerek göstermek ve yazdırmak için.
+        yeni_maas_ust_10000 = df[(df["Yeni Maaş"] > 10000)].iloc[2:4, [1, 12]]
+        print(yeni_maas_ust_10000)
+
+        #Var olan DataFrame’den ad, soyad, sektör ve yeni maaşı içeren yeni bir DataFrame oluşturmak ve yazdırmak için.
+        yeni_df = df[["Ad", "Soyad", "Sektör", "Yeni Maaş"]]
+        print(yeni_df)
+
+
+    except Exception as e:
+        print("Hata:", str(e))  #Hata olması durumunda Hata mesajını verir.
+
+if __name__ == "__main__": #Bu ifade Python'da bir komutun doğrudan çalıştırılıp çalıştırılmadığını kontrol etmek için kullanılır.
+    main() #Komutu çalıştırırken o komutu __name__ adında bir değişkene atar. Eğer komut doğrudan çalıştırılıyorsa, __name__ değişkenine "__main__" değeri atanır.
